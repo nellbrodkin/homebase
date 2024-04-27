@@ -1,8 +1,39 @@
+:root {
+  --background-color-light: #f8f9fa; /* Light mode background color */
+  --background-color-dark: #343a40; /* Dark mode background color */
+  --text-color-light: #333333; /* Light mode text color */
+  --text-color-dark: #ffffff; /* Dark mode text color */
+  --card-background-light: #ffffff; /* Light mode card background color */
+  --card-background-dark: #3a3a3a; /* Dark mode card background color */
+  --comment-background-light:rgb(203, 203, 203)a; /* Comment background color */
+  --comment-background-dark: #c53b3b; /* Comment background color */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: var(--background-color-dark);
+    --text-color: var(--text-color-dark);
+    --card-background: var(--card-background-dark);
+    --comment-background: var(comment-background-dark);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: var(--background-color-light);
+    --text-color: var(--text-color-light);
+    --card-background: var(--card-background-light);
+    --comment-background: var(comment-background-light);
+  }
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  /* background-color: var(--background-color); */
+  color: var(--text-color);
 }
 
 .logo {
@@ -35,8 +66,81 @@
 
 .card {
   padding: 2em;
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Style for the container of each post */
+.post-container {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+/* Style for the title of each post */
+.post-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Style for the details section of each post */
+.post-details {
+  color: #666666;
+  font-size: 14px;
+}
+
+/* Style for the content of each post */
+.post-content {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* Style for the upvote button */
+.upvote-button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Style for the comment section */
+.comment-section {
+  margin-top: 20px;
+}
+
+/* Style for each comment */
+.comment {
+  background-color: var(--comment-background);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Style for the comment content */
+.comment-content {
+  font-size: 16px;
+}
+
+/* Style for the comment author */
+.comment-author {
+  font-weight: bold;
+  color: #333333;
+}
+
+/* Style for the comment timestamp */
+.comment-timestamp {
+  font-size: 12px;
+  color: #666666;
 }

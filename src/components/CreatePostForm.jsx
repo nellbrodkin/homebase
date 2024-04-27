@@ -29,6 +29,8 @@ const CreatePostForm = () => {
 
       // Handle success or navigate to another page
       console.log('Post created successfully:', data);
+
+      window.location = "/";
     } catch (error) {
       console.error('Error creating post:', error.message);
     }

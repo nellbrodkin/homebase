@@ -1,12 +1,12 @@
 // PostPage.js
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../supabase';
+import "../App.css"
 
 const PostPage = () => {
     const { postId } = useParams();
-
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -76,54 +76,59 @@ const PostPage = () => {
         }
     };
 
+    const handleUpvote = () => {
+        // Increment the upvotes count locally
+        const updatedPost = { ...post, upvotes: post.upvotes + 1 };
+        setPost(updatedPost);
 
-
-
-    const handleUpvote = async () => {
-        try {
-            const { data: updatedPostData, error: upvoteError } = await supabase
-                .from('posts')
-                .update({ upvotes: post.upvotes + 1 })
-                .eq('id', postId)
-                .single();
-
-            if (upvoteError) {
-                throw upvoteError;
-            }
-
-            // Update the local state with the updated post data
-            setPost(updatedPostData);
-        } catch (error) {
-            console.error('Error upvoting post:', error.message);
-        }
+        // Send the upvote request to the server
+        supabase
+            .from('posts')
+            .update({ upvotes: post.upvotes + 1 })
+            .eq('id', postId)
+            .then(response => {
+                if (response.error) {
+                    throw response.error;
+                }
+                // Optionally, you can handle success if needed
+            })
+            .catch(error => {
+                console.error('Error upvoting post:', error.message);
+                // Revert the local state back to the original value on error
+                setPost(post);
+            });
     };
+
 
     const handleDeletePost = async () => {
         try {
             await supabase.from('posts').delete().eq('id', postId);
-            window.location.reload(); // Refresh the page after deletion
+            window.location = "/";
         } catch (error) {
             console.error('Error deleting post:', error.message);
         }
     };
 
-    const handleEditPost = async () => {
-        // implement logic
-    };
-
     return (
         <div>
+            <Link to="/">
+                <button>Home Feed</button>
+            </Link>
             <p>post page</p>
             {post ? (
                 <div>
-                    <h1>{post.title}</h1>
-                    <p>date created: {post.created_at}</p>
-                    <p>upvotes: {post.upvotes}</p>
-                    <p>description: {post.content}</p>
-                    {/* {post.content && <p>{post.content}</p>}
-          {post.image_url && <img src={post.image_url} alt="Post" />} */}
+                    <div className='card'>
+                        <h1>{post.title}</h1>
+                        <p>date created: {post.created_at}</p>
+                        <p>upvotes: {post.upvotes}</p>
+                        <p>description: {post.content}</p>
+                        <p>location: {post.location}</p>
+                    </div>
+
                     <button onClick={handleUpvote}>Upvote</button>
-                    <button onClick={handleEditPost}>Edit</button>
+                    <Link to={`/edit/${postId}`}>
+                        <button>Edit</button>
+                    </Link>
                     <button onClick={handleDeletePost}>Delete</button>
                 </div>
             ) : (
@@ -137,9 +142,12 @@ const PostPage = () => {
             </form>
             <ul>
                 {comments.map((comment, index) => (
-                    <li key={index}>
-                        <p>{comment}</p>
-                    </li>
+                    <div className="comment">
+                        <li key={index}>
+                            <p>{comment}</p>
+                        </li>
+                    </div>
+
                 ))}
             </ul>
         </div>
